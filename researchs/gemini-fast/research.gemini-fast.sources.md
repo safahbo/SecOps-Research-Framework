@@ -1,5 +1,4 @@
 # Sources for gemini-fast
-### Kaynakça
 
 1. *MITRE ATT&CK Framework Documentation*
 2. *NIST Special Publication 800-61 (Computer Security Incident Handling Guide)*
