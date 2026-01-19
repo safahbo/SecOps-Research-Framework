@@ -1,9 +1,8 @@
 # Sources for gemini-fast
-Kaynakça
-MITRE ATT&CK Framework Documentation
+### Kaynakça
 
-NIST Special Publication 800-61 (Computer Security Incident Handling Guide)
+1. *MITRE ATT&CK Framework Documentation*
+2. *NIST Special Publication 800-61 (Computer Security Incident Handling Guide)*
+3. *Sigma HQ - Generic Signature Format for SIEM Systems*
+4. *OCSF (Open Cybersecurity Schema Framework) Whitepapers*
 
-Sigma HQ - Generic Signature Format for SIEM Systems
-
-OCSF (Open Cybersecurity Schema Framework) Whitepapers
