@@ -1,88 +1,136 @@
 # Research Result for gemini-pro
-SecOps Araştırma Çerçevesi: Modern Siber Savunma Mimarisinin Derinlemesine Analizi, Stratejik Yapılandırması ve Teknik Uygulama RaporuYönetici ÖzetiDijitalleşmenin hız kazandığı ve siber tehdit yüzeyinin (attack surface) logaritmik olarak genişlediği günümüz dünyasında, geleneksel güvenlik operasyonları (SecOps) statik izleme ve reaktif müdahale döngülerine sıkışmış durumdadır. Organizasyonların maruz kaldığı tehditler artık basit zararlı yazılımlardan (malware) öte, devlet destekli aktörlerin (Nation-State Actors) karmaşık, çok aşamalı ve uzun süreli (APT) saldırılarına evrilmiştir. Bu bağlamda, SecOps kavramının "operasyonel" sınırlarını aşarak bir "araştırma ve geliştirme" disiplinine dönüşmesi zorunluluk haline gelmiştir. "SecOps Araştırma Çerçevesi" (SecOps Research Framework), güvenliği bir süreç olarak değil, sürekli öğrenen, kendini doğrulayan ve istihbaratla beslenen bir bilimsel araştırma ekosistemi olarak ele alan stratejik bir yaklaşımdır.Bu rapor, modern SecOps Araştırma Çerçevesi'nin teknolojik omurgasını oluşturan yazılım mimarilerini, konfigürasyon yönetimini, rakip analizlerini ve güvenlik sıkılaştırma (hardening) prosedürlerini en ince teknik detaylarına kadar incelemektedir. Raporda, açık kaynak kodlu ekosistemin liderleri olan Wazuh, TheHive, Cortex, MISP, OpenCTI, MITRE Caldera ve Atomic Red Team gibi teknolojilerin birbirleriyle nasıl entegre edilerek kurumsal bir "Siber Savunma Laboratuvarı" oluşturulacağı tartışılmaktadır. Sadece "nasıl yapılır" sorusuna değil, "neden bu şekilde tasarlanmalıdır" sorusuna da yanıt aranarak, teknik kararların arkasındaki stratejik nedenler, ikinci ve üçüncü dereceden etkileriyle birlikte analiz edilmiştir.1. SecOps Araştırma Çerçevesinin Kavramsal Mimarisi ve Evrimi1.1. Operasyonel Entegrasyondan Araştırma Odaklı Savunmaya GeçişTarihsel olarak Bilgi Teknolojileri (IT) ve Güvenlik (Security) ekipleri, farklı hedeflere, farklı metriklere ve hatta farklı dillere sahip izole silolar olarak faaliyet göstermişlerdir. IT ekipleri "süreklilik ve performans" (uptime/availability) odaklı çalışırken, güvenlik ekipleri "gizlilik ve bütünlük" (confidentiality/integrity) ekseninde konumlanmıştır. SecOps (Security Operations), bu iki disiplinin entegrasyonunu ifade ederek, organizasyonun siber dayanıklılığını artırmayı hedefler.1 Bu yaklaşım, güvenlik önlemlerinin ve süreçlerinin IT operasyonlarıyla birleştirilmesini ve ekiplerin tek bir birleşik güç olarak çalışmasını gerektirir.2Ancak "SecOps Araştırma Çerçevesi", bu işbirliğinin ötesine geçerek operasyonel süreçlere "araştırmacı" bir kimlik kazandırır. Geleneksel SOC (Security Operations Center) analistleri genellikle alarmları triyaje ederken (triage), araştırma çerçevesi altındaki analistler "Tehdit Avcısı" (Threat Hunter) ve "Tespit Mühendisi" (Detection Engineer) şapkalarını takarlar. Bu modelde güvenlik, statik bir koruma duvarı örmek değil, saldırganın davranışlarını modellemek, savunma mekanizmalarındaki kör noktaları tespit etmek ve sürekli olarak sistemi test etmek üzerine kuruludur.3 Modern SecOps, tespit ve müdahale yeteneklerini yapay zeka (AI) ve makine öğrenimi (ML) gibi ileri teknolojilerle güçlendirirken, sürekli izleme ve zafiyet yönetimi ile siber hijyeni sağlar.1Bu dönüşümün temelinde yatan felsefe, saldırganların statik olmadığı, dolayısıyla savunmanın da statik olamayacağı gerçeğidir. Saldırganlar TTP'lerini (Taktik, Teknik ve Prosedürler) sürekli değiştirirken, savunma mekanizmalarının da bu değişime ayak uydurabilmesi için operasyonel verinin (loglar, trafik) sürekli bir araştırma girdisi olarak kullanılması gerekir. Bu durum, SecOps'u DevOps prensiplerinin güvenliğe uyarlanması olan DevSecOps'tan ayırır; SecOps, operasyonel süreçlerin güvenliği ile ilgilenirken, araştırma boyutu bu sürece istihbarat ve doğrulama katmanlarını ekler.41.2. Çerçevenin Üç Ana SütunuSecOps Araştırma Çerçevesi, birbirini besleyen ve doğrulayan üç ana fonksiyonel sütun üzerine inşa edilir:Tespit ve Gözlemlenebilirlik (Detection & Observability): Bu sütun, organizasyonun dijital varlıkları üzerinde ne olup bittiğini anlama yeteneğidir. SIEM (Security Information and Event Management), EDR (Endpoint Detection and Response) ve NDR (Network Detection and Response) araçları bu katmanda yer alır.5 Amaç, sadece bilinen tehditleri değil, anormallikleri ve bilinmeyen tehditleri de ortaya çıkaracak derinlemesine bir görünürlük sağlamaktır. Wazuh ve Elastic Stack gibi araçlar, bu katmanda veriyi toplayan, normalize eden ve analiz eden merkezi sinir sistemini oluşturur.3Tehdit İstihbaratı ve Bağlam (Threat Intelligence & Context): Tespit edilen bir anomalinin "tehdit" olup olmadığına karar vermek için bağlam (context) gerekir. Bu sütun, dış dünyadan gelen tehdit verisinin (IoC - Indicators of Compromise) iç verilerle zenginleştirildiği alandır. OpenCTI ve MISP gibi platformlar, dağınık haldeki tehdit verilerini yapılandırılmış, ilişkilendirilmiş ve sorgulanabilir bilgiye dönüştürür.6 Araştırma boyutu burada devreye girer; analist, basit bir IP adresinden yola çıkarak, o IP'nin arkasındaki tehdit aktörünü, niyetini ve kullandığı diğer altyapıları haritalandırır.Doğrulama ve Emülasyon (Validation & Emulation): "Güvendeyiz" varsayımının yerini "Güvende olduğumuzu kanıtla" prensibine bıraktığı katmandır. Hasım emülasyonu (Adversary Emulation), gerçek dünya saldırı senaryolarının kontrollü bir şekilde sistem üzerinde simüle edilmesidir. MITRE Caldera ve Atomic Red Team gibi araçlar, savunma mekanizmalarının (tespit kuralları, engelleme politikaları) gerçekten çalışıp çalışmadığını test eder.7 Bu süreç, savunmadaki boşlukların (gap analysis) proaktif olarak tespit edilmesini sağlar.1.3. NIST ve Endüstri Standartları ile UyumlulukSecOps Araştırma Çerçevesi, uluslararası kabul görmüş standartlar üzerine temellendirilmelidir. NIST Siber Güvenlik Çerçevesi (CSF), bu yapının iskeletini oluşturur. NIST CSF'nin beş temel fonksiyonu olan Tanımla (Identify), Koru (Protect), Tespit Et (Detect), Müdahale Et (Respond) ve İyileştir (Recover), araştırma çerçevesinin yaşam döngüsünü tanımlar.8 Özellikle "Tespit Et" ve "Müdahale Et" fonksiyonları, SecOps araştırmasının en yoğun olduğu alanlardır. NIST SP 800-207 Sıfır Güven Mimarisi (ZTA), "asla güvenme, her zaman doğrula" prensibiyle bu çerçeveye entegre olur; ağ içindeki her hareket şüpheli kabul edilir ve sürekli olarak doğrulanır.9Buna ek olarak, MITRE ATT&CK (Adversarial Tactics, Techniques, and Common Knowledge) bilgi tabanı, araştırma çerçevesinin "ortak dili"dir. SecOps ekipleri, saldırgan davranışlarını ATT&CK matrisindeki tekniklere (örneğin T1059.001 PowerShell) haritalandırarak, savunma kapsamlarını ölçülebilir hale getirir.10 Bir SecOps araştırmacısı, "Sistemlerimizde yanal hareket (Lateral Movement) tespit edebilir miyiz?" sorusunu sormak yerine, "MITRE T1021 (Remote Services) tekniğini kullanan bir saldırganı tespit etme oranımız nedir?" sorusunu sorar ve Atomic Red Team ile bunu test eder.2. Kritik Teknoloji Yığını ve Mimari BileşenlerKurumsal ölçekte, sürdürülebilir ve esnek bir SecOps Araştırma Çerçevesi oluşturmak için doğru teknoloji yığınının (stack) seçilmesi ve bu teknolojilerin entegre bir mimari içinde kurgulanması kritiktir. Aşağıda, açık kaynak odaklı, yüksek yetenekli bir mimarinin temel taşları detaylandırılmıştır.2.1. Merkezi Tespit ve Analiz: Wazuh ve Elastic StackMimarinin kalbinde, uç noktalardan, ağ cihazlarından ve bulut platformlarından gelen telemetri verisini toplayan, işleyen ve analiz eden bir SIEM/XDR çözümü bulunmalıdır. Wazuh, açık kaynaklı yapısı, genişletilebilir mimarisi ve güçlü topluluk desteği ile bu rol için ideal bir adaydır.Wazuh'un Mimari Rolü:Wazuh, sadece log toplayan pasif bir SIEM değil, aynı zamanda uç noktalarda aktif koruma sağlayan bir XDR (Extended Detection and Response) çözümüdür. Mimari üç ana bileşenden oluşur:Wazuh Agent: Uç noktalara (Windows, Linux, macOS, Solaris vb.) yüklenen hafif bir yazılımdır. Dosya bütünlüğü izleme (FIM), kök kullanıcı takibi (Rootkit Detection), güvenlik konfigürasyonu değerlendirmesi (SCA) ve log toplama işlevlerini yürütür.11 Ajanlar, işletim sistemi seviyesinde derinlemesine görünürlük sağlar; örneğin Windows sistemlerde EventChannel üzerinden logları okurken, Linux sistemlerde syslog ve auditd verilerini toplar.Wazuh Server (Manager): Ajanlardan şifreli (AES/TLS) kanallar üzerinden gelen veriyi karşılar. Bu veriyi "decoder"lar aracılığıyla anlamlı alanlara (JSON formatında) ayrıştırır ve önceden tanımlanmış binlerce kural (ruleset) ile eşleştirir. Eğer bir kural eşleşmesi gerçekleşirse, bir "alert" (alarm) üretilir.Wazuh Indexer & Dashboard: Üretilen alarmların ve ham logların saklandığı, indekslendiği ve görselleştirildiği katmandır. Genellikle özelleştirilmiş bir OpenSearch veya Elasticsearch kümesi üzerinde çalışır. Bu katman, geriye dönük tehdit avcılığı (historical threat hunting) için kritik öneme sahiptir.13Wazuh'un araştırma çerçevesindeki gücü, esnekliğinden gelir. Araştırmacılar, standart kuralların ötesine geçerek, kuruma özel tehditler için özel XML tabanlı kurallar ve decoder'lar yazabilirler. Örneğin, kurum içi geliştirilen özel bir uygulamanın log formatını analiz etmek için özel bir decoder yazılabilir.2.2. Olay Müdahale ve Orkestrasyon: TheHive ve CortexBir tehdit tespit edildiğinde, bu tespitin yapılandırılmış bir müdahale sürecine (Incident Response) girmesi gerekir. TheHive ve Cortex ikilisi, bu süreci yöneten endüstri standardı açık kaynaklı çözümlerdir.TheHive (Security Incident Response Platform - SIRP): Wazuh tarafından üretilen alarmlar, TheHive üzerinde "Vaka" (Case) veya "Alarm" (Alert) olarak oluşturulur. TheHive, analistlerin işbirliği yapmasına, delilleri (observables) saklamasına ve müdahale adımlarını (tasks) takip etmesine olanak tanır.11 Vaka yönetimi, NIST'in "Müdahale Et" (Respond) fonksiyonunun dijital karşılığıdır.Cortex (Analysis & Response Engine): TheHive'ın analiz motorudur. Bir analist TheHive üzerinde şüpheli bir IP adresi veya dosya hash'i gördüğünde, tek bir tıkla Cortex'i tetikleyebilir. Cortex, "Analyzer" adı verilen modülleri kullanarak bu veriyi VirusTotal, Shodan, Onyphe, MISP gibi yüzlerce dış kaynakta sorgular.14 Ayrıca "Responder" modülleri ile güvenlik duvarında IP engelleme, Active Directory'de kullanıcı kilitleme gibi aktif müdahale işlemlerini otomatize edebilir.2.3. Stratejik İstihbarat Yönetimi: OpenCTI ve MISPAraştırma odaklı bir SecOps, veriyi sadece toplamakla kalmaz, onu küresel tehdit manzarasıyla ilişkilendirir.OpenCTI (Open Cyber Threat Intelligence Platform): Veriyi grafik tabanlı (knowledge graph) bir yapıda tutar. STIX 2.1 standardını kullanarak tehdit aktörleri, kampanyalar, saldırı teknikleri ve teknik göstergeler arasındaki ilişkileri modeller. Örneğin, "APT28" grubu ile "X-Agent" zararlı yazılımı ve "T1110" (Brute Force) tekniği arasındaki ilişkiyi görselleştirir.15 Bu, analistlere stratejik bir bakış açısı kazandırır.MISP (Malware Information Sharing Platform): Daha teknik ve operasyonel bir düzeyde, kurumlar arası IoC paylaşımı için kullanılır. OpenCTI ile entegre çalışarak, teknik verinin (hash, IP) stratejik bağlama oturmasını sağlar.62.4. Aktif Doğrulama: MITRE Caldera ve Atomic Red TeamSavunma mimarisinin çalıştığından emin olmanın tek yolu, onu sürekli olarak test etmektir.MITRE Caldera: Otomatize edilmiş bir hasım emülasyon platformudur. Ağa bir "ajan" (örneğin Sandcat) yerleştirir ve merkezi bir sunucudan (C2) komutlar alarak saldırı senaryolarını icra eder. Caldera, bir "Red Team" operasyonunu baştan sona (Initial Access'ten Impact'e kadar) simüle edebilir.7Atomic Red Team: Daha "atomik", yani tekil tekniklerin test edilmesi için kullanılan bir kütüphanedir. Örneğin, "Sadece T1003 (Credential Dumping) tespiti çalışıyor mu?" sorusunu yanıtlamak için hızlı ve hafif testler sunar. YAML tabanlı yapısı sayesinde entegrasyonu ve kullanımı çok kolaydır.163. Çalışma Prensipleri, Veri Akışı ve Entegrasyon SenaryolarıBu teknolojilerin tek başına var olması bir anlam ifade etmez; değer, entegrasyon ve veri akışında yatar. İdeal bir SecOps Araştırma Çerçevesi'nde veri akışı şu şekildedir:3.1. Faz 1: Veri Toplama ve Normalizasyon (Wazuh)Süreç, uç noktalardaki Wazuh ajanlarının işletim sistemi olaylarını dinlemesiyle başlar.Mekanizma: Ajan, ossec.conf dosyasındaki <localfile> bloklarında tanımlı kaynakları (örneğin Windows Security Event Log, Sysmon, Apache Access Log) izler.Detay: Windows sistemlerde "EventChannel" kullanılarak loglar verimli bir şekilde okunur. Ajan, topladığı veriyi sıkıştırır ve karşılıklı kimlik doğrulama (mTLS opsiyonel ama önerilen) ile sunucuya gönderir.Sunucu Tarafı: Wazuh Manager, gelen ham logu (örneğin bir JSON Sysmon logu) alır. decoder.xml dosyalarındaki Regex kuralları ile veriyi parçalar. Örneğin, bir EventID: 1 (Process Creation) logundan Image (çalışan dosya), CommandLine (komut satırı parametreleri) ve User alanlarını çıkarır.3.2. Faz 2: Tespit ve Korelasyon (Wazuh Ruleset)Ayrıştırılan veri, kural motoruna girer. Burada iki tür analiz yapılır:İmza Tabanlı: "Eğer CommandLine içinde powershell -enc geçiyorsa, bu bir şüpheli aktivitedir."Davranışsal/Korelasyon: "Eğer aynı kullanıcı 1 dakika içinde 5 kez başarısız giriş yapıp, 6. denemede başarılı olursa ve hemen ardından whoami komutunu çalıştırırsa, bu bir Brute-Force sonrası keşif (Discovery) girişimidir."Bu aşamada bir "Alert" üretilir ve alerts.json dosyasına yazılır, aynı zamanda Indexer'a gönderilir.3.3. Faz 3: Zenginleştirme ve Olay Yönetimi (TheHive & Cortex)Wazuh'ta oluşan alarm, bir entegrasyon (örneğin Shuffle, n8n veya doğrudan Python script) aracılığıyla TheHive'a iletilir.Otomasyon: TheHive, gelen alarmı otomatik olarak analiz eder. Alarmın içindeki kaynak IP adresi, Cortex'e gönderilir.Cortex Analizi: Cortex, bu IP'yi OpenCTI veritabanında sorgular. Eğer OpenCTI, bu IP'nin bilinen bir fidye yazılımı grubuyla ilişkili olduğunu belirtirse, Cortex bu bilgiyi TheHive'a geri döner.Sonuç: TheHive'daki vakanın önem derecesi (Severity) otomatik olarak "Düşük"ten "Yüksek"e çekilir ve analiste bildirim (Slack, Email) gönderilir.143.4. Faz 4: Doğrulama ve Geri Bildirim (Atomic Red Team)Analist, olayı çözdükten sonra, bu tür saldırıların gelecekte daha hızlı tespit edilmesi için bir "Detection Engineering" süreci başlatır.Test: Atomic Red Team kullanılarak, saldırıda kullanılan teknik (örneğin T1059.001) kontrollü bir ortamda tekrar edilir.18İyileştirme: Wazuh kuralları, bu testin sonuçlarına göre sıkılaştırılır (tuning). Örneğin, yanlış pozitifleri elemek için kurala "Eğer kullanıcı 'Admin' ise alarm üretme" gibi istisnalar eklenebilir (ancak bu risklidir, dikkatli yapılmalıdır).4. Kritik Konfigürasyon Dosyaları ve Teknik AnalizSistemin "beyni" olan konfigürasyon dosyaları, sistemin başarısını ve güvenliğini belirleyen en önemli unsurlardır. Aşağıda, üretim ortamı (production) için kritik parametreler incelenmiştir.4.1. Wazuh ossec.conf Derinlemesine İncelemeWazuh'un davranışını yöneten XML tabanlı ossec.conf dosyası, ajan ve sunucu tarafında farklı ancak benzer yapılar içerir.4.1.1. Gelişmiş Dosya Bütünlüğü İzleme (FIM)FIM modülü (syscheck), kritik dosyaların bütünlüğünü izler. Ancak varsayılan ayarlar genellikle yetersizdir veya çok gürültülüdür.XML<syscheck>
-  <disabled>no</disabled>
-  <frequency>43200</frequency> <scan_on_start>yes</scan_on_start>
+Sağladığınız metin, modern siber savunma stratejilerini, teknik mimariyi ve operasyonel prosedürleri birleştiren, son derece kapsamlı ve üst düzey bir **SecOps Araştırma Çerçevesi (Research Framework)** raporudur.
 
+Bu içerik, sadece bir "kurulum rehberi" olmanın ötesinde, savunmanın felsefesini ve teknik uygulamasını birleştiren bir manifesto niteliğindedir. Aşağıda, bu derinlemesine analizi daha sindirilebilir, görselleştirilmiş ve yapılandırılmış bir formatta sunuyorum.
+
+---
+
+# SecOps Araştırma Çerçevesi: Modern Siber Savunma Mimarisinin Analizi ve Uygulaması
+
+## Yönetici Özeti
+
+Geleneksel SecOps yaklaşımlarının statik ve reaktif doğası, modern tehdit aktörlerinin (APT, Nation-State) karmaşıklığı karşısında yetersiz kalmaktadır. Bu rapor, SecOps'u bir "operasyon" biriminden çıkarıp, sürekli öğrenen, doğrulayan ve istihbaratla beslenen bir **"Bilimsel Araştırma Ekosistemi"**ne dönüştürmeyi hedefler.
+
+Wazuh, TheHive, Cortex, MISP, OpenCTI ve MITRE Caldera gibi açık kaynak liderlerinin entegrasyonu ile oluşturulan bu çerçeve, **"Güvendeyiz"** varsayımını reddedip **"Güvende olduğumuzu kanıtla"** prensibini benimser.
+
+---
+
+## 1. Kavramsal Mimari ve Dönüşüm
+
+### 1.1. Operasyonel Entegrasyondan Araştırma Odaklılığa
+
+Geleneksel yapıda IT (Süreklilik odaklı) ve Güvenlik (Gizlilik odaklı) ekipleri izole çalışırken, SecOps bu siloları yıkar. Ancak **Araştırma Çerçevesi**, bu yapıya "Tehdit Avcısı" (Threat Hunter) ve "Tespit Mühendisi" (Detection Engineer) rollerini ekleyerek süreci bir adım ileri taşır. Savunma mekanizmaları, saldırganın TTP'lerine (Taktik, Teknik, Prosedür) göre sürekli modifiye edilir.
+
+### 1.2. Çerçevenin Üç Ana Sütunu
+
+Bu mimari üç temel fonksiyon üzerine kuruludur:
+
+1. **Tespit ve Gözlemlenebilirlik (Detection & Observability):** "Ne oluyor?" sorusunun cevabıdır. (Wazuh, Elastic Stack).
+2. **Tehdit İstihbaratı ve Bağlam (Threat Intel & Context):** "Bu bir tehdit mi?" sorusunun cevabıdır. Verinin IoC'ler ile zenginleştirilmesidir (OpenCTI, MISP).
+3. **Doğrulama ve Emülasyon (Validation & Emulation):** "Savunmamız çalışıyor mu?" sorusunun cevabıdır. Saldırı simülasyonlarıdır (MITRE Caldera, Atomic Red Team).
+
+### 1.3. Standartlar ve Uyumluluk
+
+* **NIST CSF:** Tanımla, Koru, Tespit Et, Müdahale Et, İyileştir döngüsü temel alınır.
+* **MITRE ATT&CK:** Saldırgan davranışlarının haritalandırıldığı ortak dildir.
+
+---
+
+## 2. Kritik Teknoloji Yığını (Tech Stack)
+
+Kurumsal ve sürdürülebilir bir mimari için seçilen bileşenlerin entegrasyon yeteneği kritiktir.
+
+| Kategori | Araç | Rolü ve Önemi |
+| --- | --- | --- |
+| **SIEM / XDR** | **Wazuh** | Merkezi sinir sistemi. Log toplama, FIM, SCA ve korelasyon. |
+| **SIRP** | **TheHive** | Vaka yönetimi ve analist işbirliği platformu. |
+| **Response Engine** | **Cortex** | TheHive'ın analiz motoru. Yüzlerce dış kaynakta (VirusTotal, Shodan) sorgulama yapar. |
+| **Threat Intel** | **OpenCTI / MISP** | Stratejik (ilişkisel) ve teknik (IoC) istihbarat yönetimi. |
+| **Emulation** | **MITRE Caldera** | Otomatize edilmiş hasım emülasyonu (Adversary Emulation). |
+| **Unit Test** | **Atomic Red Team** | Tekil tekniklerin (T1003 vb.) savunma karşısında test edilmesi. |
+
+---
+
+## 3. Çalışma Prensipleri ve Entegrasyon Senaryosu
+
+Veri akışı ve entegrasyon, bu araçları bir "ekosisteme" dönüştüren süreçtir.
+
+1. **Faz 1 (Toplama):** Wazuh ajanı, `EventChannel` veya `Syslog` üzerinden veriyi okur, sıkıştırır ve şifreli olarak sunucuya iletir.
+2. **Faz 2 (Tespit):** Sunucu, gelen veriyi `decoder` ile parçalar ve `ruleset` ile eşleştirir. Eşleşme olursa **Alert** üretilir.
+3. **Faz 3 (Müdahale):** Alarm TheHive'a iletilir. Cortex, ilgili IP/Hash'i otomatik olarak analiz eder. Eğer OpenCTI'da bu IoC bilinen bir APT grubuyla eşleşirse, vaka kritikliği artırılır.
+4. **Faz 4 (Doğrulama):** Analist, saldırı tekniğini Atomic Red Team ile simüle eder ve Wazuh kurallarını "tunning" işlemine tabi tutar.
+
+---
+
+## 4. Kritik Konfigürasyon Analizi (Hardening)
+
+Sistemin başarısı, varsayılan ayarların ötesine geçilmesine bağlıdır.
+
+### 4.1. Wazuh `ossec.conf` (FIM & Sysmon)
+
+Dosya bütünlüğü izlemede `whodata` parametresi, "dosyayı kimin değiştirdiğini" görmek için kritiktir. Sysmon entegrasyonu ise standart Windows loglarının yetersizliğini kapatır.
+
+```xml
+<syscheck>
   <directories check_all="yes" realtime="yes" whodata="yes">/etc</directories>
-  <directories check_all="yes" realtime="yes" whodata="yes">/bin</directories>
-  <directories check_all="yes" realtime="yes" whodata="yes">/sbin</directories>
-  <directories check_all="yes" realtime="yes" whodata="yes">/usr/bin</directories>
-  
   <directories check_all="yes" whodata="yes">C:\Windows\System32\drivers\etc</directories>
-  <directories check_all="yes" whodata="yes">C:\Users\*\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</directories>
-
-  <ignore>/etc/mtab</ignore>
-  <ignore>/etc/hosts.deny</ignore>
-  <ignore type="sregex">.log$|.swp$</ignore>
-  
-  <windows_registry>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run</windows_registry>
-  <windows_registry>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce</windows_registry>
 </syscheck>
-Analiz: whodata="yes" parametresi, olay müdahalesi için altın değerindedir. Dosyanın değiştiğini bilmek iyidir, ancak "Kim değiştirdi?" sorusunun cevabı (örn. apache kullanıcısı mı yoksa root mu?) saldırının kaynağını belirler. Ancak realtime ve whodata CPU kullanımını artırabilir, bu nedenle sadece kritik dizinlerde kullanılmalıdır.194.1.2. Sysmon Entegrasyonu ve Log ToplamaWazuh, Windows Event Logları toplar ancak standart loglar (Security, System) süreç oluşturma detaylarını vermez. Sysmon entegrasyonu zorunludur.XML<localfile>
+
+<localfile>
   <location>Microsoft-Windows-Sysmon/Operational</location>
   <log_format>eventchannel</log_format>
-  <query>Event/System</query>
-</localfile>
-Stratejik Not: <query> kullanımı, merkezi sunucuya giden veri miktarını (EPS - Events Per Second) düşürür ve lisans/donanım maliyetlerini optimize eder. Ancak araştırma amaçlı sistemlerde, başlangıçta tüm logları alıp sunucu tarafında filtrelemek daha güvenli olabilir.204.2. TheHive application.conf Güvenlik YapılandırmasıTheHive, hassas olay verilerini barındırdığı için sıkı bir güvenlik yapılandırması gerektirir. application.conf dosyası (HOCON formatı) bu ayarları içerir.Kod snippet'i# Gizli Anahtar: Oturum güvenliği için kritiktir. Asla varsayılan değerde bırakılmamalıdır.
-# Saldırganlar bu anahtarı bilirse, yönetici oturumu taklit edebilirler.
-play.http.secret.key="QCY?tAnfk?aZ?iwrNwnxIlR6CTf:G3gf:90Latabg@5241ABR5W:1uDFN];Ikj"
+  <query>Event/System</query> </localfile>
 
-# Veritabanı ve Index Bağlantıları
-db.janusgraph {
-  storage {
-    backend = cql
-    hostname = ["10.0.0.5"] # Cassandra/Scylla IP
-    cql {
-      cluster-name = thp
-      keyspace = thehive
-      # Üretim ortamında veritabanı şifresi mutlaka kullanılmalıdır
-      # username = "thehive"
-      # password = "SecureDBPassword123!"
-    }
-  }
-}
+```
 
+### 4.2. TheHive `application.conf`
+
+Güvenlik operasyon merkezi yazılımının kendisi de güvenli olmalıdır. `play.http.secret.key` asla varsayılan bırakılmamalıdır.
+
+```hocon
+# Güvenlik Açığı Riski: Bu anahtar değişmezse oturumlar çalınabilir.
+play.http.secret.key="QCY?tAnfk?aZ?iwrNwnxIlR6CTf..."
+
+# Elasticsearch Bağlantısı (Mutlaka HTTPS olmalı)
 index.search {
-  backend = elasticsearch
-  hostname = ["10.0.0.6"]
-  index-name = thehive
-  # Elasticsearch ile şifreli iletişim (HTTPS)
   scheme = "https"
-  # Sertifika doğrulama (Self-signed ise keystore yolu belirtilmelidir)
-  trustStore {
-    path = "/etc/thehive/pki/truststore.jks"
-    password = "TrustStorePassword"
-  }
+  trustStore { path = "/etc/thehive/pki/truststore.jks" }
 }
 
-# Dosya Depolama
-storage {
-  provider = localfs
-  localfs.location = /opt/thp/thehive/files
-}
-Güvenlik Noktası: play.http.secret.key parametresi en kritik güvenlik açığı potansiyelidir. Docker deploymentlarında bu değer genellikle ortam değişkeni veya secret dosyası ile enjekte edilmelidir (include "/etc/thehive/secret.conf"). Ayrıca, Elasticsearch ile iletişimin şifresiz olması, ağdaki bir saldırganın vaka verilerini (hassas bilgiler, IP'ler) okumasına neden olabilir.214.3. MITRE Caldera ve Atomic Red Team YapılandırmasıCaldera'nın conf/default.yml dosyası, sunucunun ve ajanların davranışını belirler.YAML# Güvenlik Parametreleri
-api_key_red: "RED_TEAM_SECURE_TOKEN_v2" # Red Team API erişimi
-api_key_blue: "BLUE_TEAM_SECURE_TOKEN_v2" # Blue Team API erişimi
-crypt_salt: "J8b4x9L2m1k0P3q5" # Şifreleme tuzu (rastgele olmalı)
-encryption_key: "AES256_Encryption_Key_Change_Me" # Ajan iletişimi için
+```
 
-# Erişim Ayarları
-host: 0.0.0.0
-port: 8888
+---
 
-# Eklentiler (Sadece gerekenler aktif edilmeli)
-plugins:
-  - atomic # Atomic Red Team testleri
-  - sandcat # Varsayılan ajan
-  - stockpile # TTP kütüphanesi
-  - access # Erişim yönetimi
-Stratejik Analiz: encryption_key parametresi, Caldera sunucusu ile sahada çalışan ajanlar (implants) arasındaki komuta kontrol (C2) trafiğini şifreler. Bu anahtarın varsayılan değerde kalması, savunma ekiplerinin (Blue Team) veya gerçek saldırganların C2 trafiğini çözmesine ve simülasyonu manipüle etmesine neden olabilir.23Atomic Red Team için yapılandırma genellikle bir YAML dosyası üzerinden değil, dizin yapısı ve PowerShell modülü üzerinden yönetilir. Testler atomics klasöründe T1000 formatında saklanır.Örnek Atomic Test YAML (T1003.001.yaml - LSASS Dump):YAMLattack_technique: T1003.001
-display_name: OS Credential Dumping: LSASS Memory
-atomic_tests:
-  - name: Dump LSASS.exe Memory using ProcDump
-    executor:
-      command: |
-        procdump.exe -ma lsass.exe lsass_dump.dmp
-      name: command_prompt
-      elevation_required: true 
-Bu dosya yapısı, testlerin okunabilirliğini ve otomasyonunu kolaylaştırır. elevation_required: true parametresi, testin yönetici hakları gerektirdiğini belirtir, bu da test öncesi hazırlık için önemlidir.245. Tehdit Araştırma ve Avcılık (Threat Hunting) MetodolojileriSecOps Araştırma Çerçevesi'nde araçlar sadece birer vasıtadır; asıl güç metodolojidedir. Tehdit avcılığı, "Sistemlerimizde bir saldırgan var ve biz bunu henüz tespit edemedik" varsayımıyla başlar.5.1. Hipotez Tabanlı Avcılık (Hypothesis-Driven Hunting)Bu yaklaşım, yeni bir tehdit istihbaratı veya teknik bilgiye dayalı bir soru (hipotez) oluşturulmasıyla başlar.Senaryo: Yeni bir raporda, saldırganların "Print Spooler" servisini kullanarak yetki yükselttiği (PrintNightmare vb.) belirtilmiştir.Hipotez: "Ağımızdaki sunucularda spoolsv.exe süreci tarafından oluşturulan şüpheli dosyalar olabilir."Wazuh ile Araştırma: Analist, Wazuh Discovery sekmesinde Sysmon Event ID 11 (File Create) loglarını filtreler. Image alanı spoolsv.exe olan ve dosya uzantısı .dll veya .exe olan kayıtları arar.Atomic Red Team ile Doğrulama: Tespit kuralının çalışıp çalışmadığını test etmek için Atomic Red Team'in ilgili testi (Invoke-AtomicTest T1547.012) çalıştırılır. Eğer Wazuh alarm üretmezse, tespit kuralı eksiktir ve yazılması gerekir.5.2. İstihbarat Odaklı Avcılık (Intel-Driven Hunting)OpenCTI ve MISP'ten gelen veriler avcılığı tetikler.Akış: MISP, Finans sektörünü hedef alan bir kampanya hakkında yeni IoC'ler (Hash, IP, Domain) yayınlar.Otomasyon: Wazuh, MISP API'si ile entegre edilerek (örneğin bir Python scripti veya entegrasyon modülü ile) bu IoC'leri otomatik olarak "CDB List" (Constant Database) içine çeker.Retrospektif Analiz: Wazuh, son 30 günün loglarını tarayarak bu yeni öğrenilen IoC'lerin daha önce ağda görünüp görünmediğini kontrol eder. Bu, "Geriye Dönük Avcılık"tır ve Elasticsearch'ün gücünü kullanır.65.3. Hasım Emülasyonu ile "Purple Teaming"Kırmızı (Saldırı) ve Mavi (Savunma) ekiplerin birlikte çalıştığı modeldir.Plan: Caldera üzerinde "Ransomware Emulation" profili seçilir. Bu profil, dosya şifreleme, gölge kopyaları silme (vssadmin delete shadows) ve fidye notu bırakma adımlarını içerir.İcra: Simülasyon başlatılır.Analiz: Mavi ekip, her bir adımın Wazuh ve TheHive üzerinde oluşturduğu izleri inceler. "Gölge kopyaların silinmesi" tespit edildi mi? Edilmediyse, neden? Sysmon logları mı eksik, yoksa kural mı yok?Sonuç: Eksiklikler giderilir ve test tekrarlanır. Bu döngü, savunmanın olgunluk seviyesini sürekli artırır.186. Rakiplerin Karşılaştırmalı Stratejik AnaliziPazar, hem açık kaynaklı hem de ticari (proprietary) çözümlerle doludur. Hangi çözümün seçileceği, kurumun bütçesi, teknik yetkinliği ve uyumluluk gereksinimlerine bağlıdır.6.1. SIEM/XDR Karşılaştırması: Wazuh vs. Splunk vs. CrowdStrike vs. ElasticÖzellikWazuh (Açık Kaynak)Splunk Enterprise (Ticari)CrowdStrike Falcon (Ticari)Elastic Security (Hibrit)Maliyet ModeliLisans maliyeti yok (Ücretsiz). Maliyet, donanım ve insan kaynağıdır.Veri hacmine (GB/gün) veya iş yüküne dayalı çok yüksek lisans maliyeti.Uç nokta (Endpoint) başına lisanslama. Premium fiyatlandırma.Freemium model. Gelişmiş güvenlik özellikleri (ML, EDR) lisans gerektirir.Kurulum ve BakımYüksek teknik bilgi ve Linux uzmanlığı gerektirir. Bakımı zordur.Kurulumu nispeten kolaydır ancak "Splunk Architect" uzmanlığı gerektirir.Bulut tabanlı (SaaS) olduğu için kurulumu ve bakımı en kolay çözümdür.25Cluster yönetimi zordur, ölçeklendirme uzmanlık ister.Özelleştirme (Customization)Sınırsız. Kod, kural, decoder her şey değiştirilebilir. Araştırma için en iyisidir.Çok esnektir (SPL dili), ancak kapalı kaynak kodludur.Düşük. "Black-box" (kapalı kutu) mantığıyla çalışır. Müdahale imkanı sınırlıdır.Yüksek. Açık kaynak kodlu kökleri sayesinde esnektir.Tespit YeteneğiKural tabanlıdır. Out-of-the-box (hazır) kurallar iyidir ama tuning gerektirir.Analitik ve korelasyon yeteneği çok güçlüdür.Davranışsal analiz, AI/ML ve tehdit istihbaratı konusunda pazar lideridir.Hızlı arama ve ML destekli anomali tespiti güçlüdür.Kullanım SenaryosuBütçesi kısıtlı, teknik ekibi güçlü, veri egemenliği isteyen kurumlar.Büyük bütçeli, karmaşık veri analitiği ihtiyacı olan dev işletmeler.Yönetim kolaylığı ve en üst düzey koruma isteyen, bütçe sorunu olmayan kurumlar.Hız ve ölçeklenebilirlik arayan, DevOps kültürüne yakın ekipler.Stratejik Yorum: Bir "Araştırma Çerçevesi" için Wazuh veya Elastic daha uygundur çünkü araştırmacıya "motorun kaputunu açma" imkanı verir. CrowdStrike ve Splunk ise "Operasyonel Mükemmellik" odaklıdır; işi sizin yerinize yapmayı vaat ederler ancak araştırmacının detaylara inmesini kısıtlayabilirler (örneğin ham veriye erişim veya özel tespit mantığı yazma konularında).267.2. Tehdit İstihbaratı: OpenCTI vs. MISPBu iki platform rakip değil, tamamlayıcıdır. Ancak odak noktaları farklıdır.MISP: "Hız ve Paylaşım" odaklıdır. Bir saldırı olduğunda IoC'leri (IP, Hash) hızlıca diğer kurumlarla paylaşmak için tasarlanmıştır. Veri modeli "Olay" (Event) ve "Nitelik" (Attribute) tabanlıdır, yani düzlemseldir. Kurulumu ve kullanımı OpenCTI'a göre daha basittir (PHP/MySQL).27OpenCTI: "Analiz ve Bilgi Yönetimi" odaklıdır. STIX 2.1 standardını tam destekler ve grafik tabanlı (Hypergraph) çalışır. Veriler arasındaki karmaşık ilişkileri (örneğin "Bu malware, şu zafiyeti kullanarak, şu sektörleri hedefledi") modeller. Mimarisi çok daha karmaşıktır (React, GraphQL, Elastic, Redis, RabbitMQ, MinIO) ve ciddi kaynak tüketir.Karar: Basit bir IoC listesi tutmak için MISP yeterlidir. Ancak derinlemesine tehdit aktörü profillemesi ve stratejik analiz yapılacaksa OpenCTI şarttır.287. En İyi Uygulamalar ve Güvenlik Sıkılaştırma (Hardening)Güvenlik araçlarının kendisi de birer yazılımdır ve zafiyet barındırabilir. Bir SecOps çerçevesinin güvenliği, en zayıf halkası kadardır.7.1. İletişim Güvenliği (mTLS)Tüm bileşenler arasındaki iletişim şifrelenmelidir.Wazuh: Ajan-Sunucu iletişimi için Karşılıklı TLS (mTLS) kimlik doğrulaması yapılandırılmalıdır. Bu, sadece yetkili sertifikaya sahip ajanların sunucuya log gönderebilmesini sağlar. Aksi takdirde, ağdaki bir saldırgan sahte loglar göndererek (Log Injection) analistleri yanıltabilir veya SIEM'i DDoS edebilir.29Docker İletişimi: OpenCTI veya TheHive konteynerleri arasındaki iletişim, Docker ağı içinde izole edilmeli ve dışarıya sadece gerekli portlar (örneğin 443) açılmalıdır.7.2. API Güvenliği ve Erişim YönetimiOtomasyon için kullanılan API anahtarları büyük risk taşır.Best Practice: API anahtarları asla kod içine (hardcoded) gömülmemelidir. HashiCorp Vault gibi bir Secret Management çözümü veya Docker Secrets kullanılmalıdır.Role-Based Access Control (RBAC): Wazuh ve TheHive üzerinde oluşturulan kullanıcılar ve API token'ları "En Az Ayrıcalık" (Least Privilege) ilkesine göre yetkilendirilmelidir. Sadece "okuma" yapacak bir entegrasyonun "yazma" veya "silme" yetkisi olmamalıdır.307.3. Loglama ve İzleme (Watch the Watcher)Güvenlik araçlarının logları da izlenmelidir.Uygulama: Wazuh sunucusunun kendi logları (/var/ossec/logs/api.log), başka bir log sunucusuna veya kendisine yönlendirilerek, sistem yöneticilerinin aktiviteleri denetlenmelidir. Birinin tespit kuralını devre dışı bırakıp bırakmadığı veya logları silip silmediği takip edilmelidir.8. Gelecek Vizyonu ve SonuçSecOps Araştırma Çerçevesi, statik bir yapı değil, yaşayan bir organizmadır. Gelecekte bu alan, Üretken Yapay Zeka (Generative AI) ve Otonom SOC kavramlarıyla daha da evrilecektir. Microsoft Security Copilot ve Google SecOps (Chronicle + Gemini) gibi örnekler, analistlerin doğal dil ile karmaşık sorgular yapmasına ("Bu IP ile ilgili son 24 saatteki tüm şüpheli aktiviteleri özetle") olanak tanımaktadır.31 Ancak bu kolaylık, altta yatan teknik derinliğin kaybolması riskini de beraberinde getirir.Sonuç olarak, başarılı bir SecOps Araştırma Çerçevesi;Doğru Mimari: Entegre çalışabilen (API-first) araçların seçimi,Derinlemesine Konfigürasyon: Varsayılan ayarların ötesine geçen, kuruma özel optimizasyonlar (ossec.conf gibi),Sürekli Doğrulama: Varsayımların Atomic Red Team gibi araçlarla sürekli test edilmesi,İnsan Kaynağı: Bu araçları kullanacak yetkin "Tespit Mühendisleri"nin yetiştirilmesi,temelleri üzerine kurulmalıdır. Teknoloji tek başına savunma sağlamaz; teknoloji, yetkin bir ekibin elinde doğru bir metodoloji ile birleştiğinde "siber dayanıklılık" üretir.Kaynak Kodları: 1
+## 5. Tehdit Avcılığı (Threat Hunting) Metodolojileri
+
+### Hipotez Tabanlı Avcılık (Hypothesis-Driven)
+
+Yeni bir bilgi veya varsayımla başlar.
+
+* **Hipotez:** "Print Spooler servisi (spoolsv.exe) şüpheli dosyalar oluşturuyor olabilir."
+* **Eylem:** Wazuh Discovery üzerinden Sysmon Event ID 11 filtrelenir.
+* **Doğrulama:** Atomic Red Team T1547.012 testi ile kuralın çalışıp çalışmadığı kontrol edilir.
+
+### Hasım Emülasyonu (Purple Teaming)
+
+Caldera kullanılarak tam ölçekli bir saldırı (Ransomware profili) simüle edilir. Mavi ekip, "Gölge kopyaların silinmesi" (vssadmin) işleminin loglanıp loglanmadığını inceler.
+
+---
+
+## 6. Stratejik Karşılaştırma ve Sonuç
+
+| Özellik | Wazuh (Açık Kaynak) | Splunk / CrowdStrike (Ticari) |
+| --- | --- | --- |
+| **Esneklik** | Sınırsız (Kod/Kural erişimi). | Sınırlı (Black-box veya özel dil). |
+| **Maliyet** | İnsan kaynağı ve donanım odaklı. | Lisans ve veri hacmi odaklı. |
+| **Kullanım** | Araştırma ve derinlemesine analiz için ideal. | Operasyonel mükemmellik ve hız için ideal. |
+
+### Sonuç
+
+Başarılı bir SecOps Araştırma Çerçevesi; sadece araçların kurulumu değil, bu araçların birbirleriyle konuşturulması, varsayılan ayarların sıkılaştırılması ve sürekli doğrulama (Validation) kültürü ile mümkündür. Gelecekte bu yapı, Üretken Yapay Zeka (Generative AI) ile entegre olarak analistlerin doğal dil ile karmaşık sorgular yapabildiği **Otonom SOC** yapılarına evrilecektir.
+
+---
+
+### Sizin İçin Bir Sonraki Adım
+
+Bu çerçevenin teknik kurulumuna başlamayı planlıyorsanız, **Wazuh ve TheHive entegrasyonu için gerekli olan örnek Python script'ini** veya **Docker Compose dosya yapısını** sizin için hazırlayabilirim. Hangisiyle ilerlemek istersiniz?
