@@ -129,8 +129,3 @@ Caldera kullanılarak tam ölçekli bir saldırı (Ransomware profili) simüle e
 
 Başarılı bir SecOps Araştırma Çerçevesi; sadece araçların kurulumu değil, bu araçların birbirleriyle konuşturulması, varsayılan ayarların sıkılaştırılması ve sürekli doğrulama (Validation) kültürü ile mümkündür. Gelecekte bu yapı, Üretken Yapay Zeka (Generative AI) ile entegre olarak analistlerin doğal dil ile karmaşık sorgular yapabildiği **Otonom SOC** yapılarına evrilecektir.
 
----
-
-### Sizin İçin Bir Sonraki Adım
-
-Bu çerçevenin teknik kurulumuna başlamayı planlıyorsanız, **Wazuh ve TheHive entegrasyonu için gerekli olan örnek Python script'ini** veya **Docker Compose dosya yapısını** sizin için hazırlayabilirim. Hangisiyle ilerlemek istersiniz?
