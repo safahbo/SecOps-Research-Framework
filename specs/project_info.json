@@ -1,13 +1,13 @@
 {
   "projectName": "SecOps Autonomous Defense Engine",
-  "category": "Security Engineering & Automation",
+  "category": "DevSecOps & Security CI/CD Automation", 
   "author": "Safa Hacıbayramoğlu",
   "version": "1.0.0",
-  "description": "Autonomous security framework featuring self-healing watchdogs and continuous detection verification (Auto-Test) to prevent blind spots.",
+  "description": "Autonomous security framework implementing CI/CD principles for threat detection, featuring self-healing watchdogs and continuous verification (Auto-Test).",
   "features": [
     "Real-time Service Health Monitoring (Watchdog)",
     "Automated Attack Simulation (Self-Check)",
-    "JSON-First API Integration (Wazuh)",
+    "CI/CD Pipeline Integration Capability", 
     "Auto-Remediation of Crashed Services"
   ],
   "requirements": {
