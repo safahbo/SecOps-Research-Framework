@@ -7,7 +7,7 @@
 
 ![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
-![Language](https://img.shields.io/badge/language-Bash%20%7C%20Python-orange.svg)
+![Language](https://img.shields.io/badge/language-Bash%20%7C%20
 
 ## 📖 Proje Hakkında
 **SecOps-Research-Framework (SRF)**, geleneksel siber güvenlik operasyonlarını (SOC) pasif bir izleme süreci olmaktan çıkarıp, kendi kendini test eden ve doğrulayan **otonom bir mühendislik disiplinine** dönüştürmeyi hedefler.
