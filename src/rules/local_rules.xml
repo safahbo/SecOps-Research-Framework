@@ -1,0 +1,11 @@
+<group name="secops-engineering,">
+
+  <rule id="100099" level="3">
+    <decoded_as>json</decoded_as>
+    <field name="integration">secops-autotest</field>
+    <field name="status">simulation_active</field>
+    <description>SECOPS-LAB: Autonomous System Integrity Check (Self-Test Pattern)</description>
+    <options>no_full_log</options>
+  </rule>
+
+</group>
