@@ -1,14 +1,21 @@
 {
-  "projectName": "SecOps Autonomous Defense Engine",
-  "category": "DevSecOps & Security CI/CD Automation", 
+  "projectName": "SecOps-Research-Framework",
+  "category": "DevSecOps & Security CI/CD Automation",
   "author": "Safa Hacıbayramoğlu",
   "version": "1.0.0",
-  "description": "Autonomous security framework implementing CI/CD principles for threat detection, featuring self-healing watchdogs and continuous verification (Auto-Test).",
+  "license": "MIT",
+  "description": "An autonomous security framework implementing CI/CD principles for threat detection. It features a CLI-based management tool (SRF-CLI), self-healing watchdogs, and continuous verification (Auto-Test) to eliminate blind spots.",
+  "architecture": {
+    "cli_tool": "src/srf-cli.sh",
+    "controller": "src/automation/secops-watchdog.sh",
+    "logic": "src/rules/local_rules.xml",
+    "standard": "JSON-First API Integration"
+  },
   "features": [
+    "SRF-CLI Management Tool",
     "Real-time Service Health Monitoring (Watchdog)",
     "Automated Attack Simulation (Self-Check)",
-    "CI/CD Pipeline Integration Capability", 
-    "Auto-Remediation of Crashed Services"
+    "CI/CD Pipeline Integration Capability"
   ],
   "requirements": {
     "os": "Ubuntu 22.04 LTS",
