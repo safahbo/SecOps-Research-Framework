@@ -1,1 +1,22 @@
-
+{
+  "projectName": "SecOps Autonomous Defense Engine",
+  "category": "Security Engineering & Automation",
+  "author": "Safa Hacıbayramoğlu",
+  "version": "1.0.0",
+  "description": "Autonomous security framework featuring self-healing watchdogs and continuous detection verification (Auto-Test) to prevent blind spots.",
+  "features": [
+    "Real-time Service Health Monitoring (Watchdog)",
+    "Automated Attack Simulation (Self-Check)",
+    "JSON-First API Integration (Wazuh)",
+    "Auto-Remediation of Crashed Services"
+  ],
+  "requirements": {
+    "os": "Ubuntu 22.04 LTS",
+    "language": "Bash, Python 3.10",
+    "dependencies": [
+      "jq",
+      "curl",
+      "wazuh-agent"
+    ]
+  }
+}
