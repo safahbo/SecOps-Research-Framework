@@ -31,6 +31,4 @@
 
 ---
 
-**Son Güncelleme:** Ocak 2026  
-**Versiyon:** 1.0  
-**Hazırlayan:** SecOps Research Team
+
